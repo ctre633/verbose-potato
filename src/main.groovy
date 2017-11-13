@@ -4,14 +4,20 @@ def file = new URL("https://gist.githubusercontent.com/anonymous/747d5e3bbc57949
 
 def sal
 def topSal
+def nameData
+def name
 
 def data = file.eachLine { line ->
-    if (line.contains('SAL')) {
-        sal = Integer.parseInt(line.replaceAll("[\\D]", ""))
-        if (sal > topSal) {
+    if (!line.contains('::EXT::')){
+        nameData = line.substring(0,20).trim()
+    }
+    else if (line.contains('::EXT::SAL')) {
+        if ((sal = Integer.parseInt(line.substring(11))) > topSal) {
             topSal = sal
+            name = nameData
         }
     }
 }
 
-println NumberFormat.getCurrencyInstance(Locale.US).format(topSal)
+
+println "$name, ${NumberFormat.getCurrencyInstance(Locale.US).format(topSal)}"
